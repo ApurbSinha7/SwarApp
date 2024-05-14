@@ -24,7 +24,9 @@ class MainActivity : ComponentActivity() {
 //                        name = "Android",
 //                        modifier = Modifier.padding(innerPadding)
 //                    )
-                    LoginScreen(modifier = Modifier.padding(innerPadding), typography = Typography, title = "Swar")
+                    val viewModel = AuthViewModel()
+
+                    LoginScreen(modifier = Modifier.padding(innerPadding), typography = Typography, title = "Swar", viewModel = viewModel)
                 }
             }
         }

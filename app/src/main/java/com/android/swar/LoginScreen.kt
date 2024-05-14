@@ -18,12 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier,
-        title: String, typography: Typography
+        title: String, typography: Typography, viewModel: AuthViewModel
 ) {
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
@@ -54,20 +53,11 @@ fun LoginScreen(modifier: Modifier = Modifier,
 
                 Button(
                         onClick = {
-                                // Handle login here
-                                val auth = FirebaseAuth.getInstance()
-                                auth.signInWithEmailAndPassword(email, password)
-                                        .addOnCompleteListener { task ->
-                                                if (task.isSuccessful) {
-
-                                                } else {
-                                                        // Login failed
-                                                }
-                                        }
+                                viewModel.register(email, password)
                         },
                         modifier = Modifier.padding(16.dp)
                 ) {
-                        Text(text = "Login")
+                        Text(text = "Register")
                 }
         }
 }
