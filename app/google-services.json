@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "19830205710",
+    "project_id": "swar-300de",
+    "storage_bucket": "swar-300de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19830205710:android:add516aa04e27441107b5f",
+        "android_client_info": {
+          "package_name": "com.android.swar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwG4LirhUUYG5XbxdVwFn7FfXRLliqop4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
