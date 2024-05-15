@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.android.swar.ui.theme.SwarTheme
 import com.android.swar.ui.theme.Typography
 
@@ -26,26 +29,32 @@ class MainActivity : ComponentActivity() {
 //                    )
                     val viewModel = AuthViewModel()
 
-                    LoginScreen(modifier = Modifier.padding(innerPadding), typography = Typography, title = "Swar", viewModel = viewModel)
+                    val navController = rememberNavController()
+
+                    // Set up the NavHost with the navigation graph
+                    NavHost(navController = navController, startDestination = "login_screen") {
+                        composable("login_screen") {
+                            LoginScreen(
+                                navController = navController,
+                                modifier = Modifier.padding(innerPadding),
+                                typography = Typography,
+                                title = "Swar",
+                                viewModel = viewModel
+                            )
+                        }
+                        composable("register") {
+                            RegistrationScreen(
+                                navController = navController,
+                                modifier = Modifier.padding(innerPadding),
+                                typography = Typography,
+                                title = "Swar",
+                                viewModel = viewModel
+                            )
+                        }
+                    }
                 }
             }
         }
-
-//        val sendButton: Button = findViewById(R.id.send_button)
-//        sendButton.setOnClickListener {view ->
-//            sendData(view)
-//        }
-//    }
-//        fun sendData(view: View) {
-//        // Write a message to the database
-//        val database = Firebase.database
-//        val myRef = database.getReference("message")
-//
-//        myRef.setValue("Hello, World!")
-//
-//        Toast.makeText(view.context, "Data sent successfully", Toast.LENGTH_SHORT).show()
-//    }
-
     }
 }
 

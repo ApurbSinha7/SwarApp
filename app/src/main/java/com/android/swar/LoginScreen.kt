@@ -1,9 +1,11 @@
 package com.android.swar
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -16,13 +18,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier,
-        title: String, typography: Typography, viewModel: AuthViewModel
+        title: String, typography: Typography, viewModel: AuthViewModel, navController: NavController
 ) {
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
@@ -53,14 +58,25 @@ fun LoginScreen(modifier: Modifier = Modifier,
 
                 Button(
                         onClick = {
-                                viewModel.register(email, password)
+                                viewModel.login(email, password)
                         },
                         modifier = Modifier.padding(16.dp)
                 ) {
-                        Text(text = "Register")
+                        Text(text = "Login")
                 }
+                Text(
+                        text = "First Time Here? Register",
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth()
+                                .clickable { navController.navigate("register") }
+                )
         }
 }
+
+
 
 
 fun sendData() {
