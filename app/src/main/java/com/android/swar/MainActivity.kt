@@ -27,10 +27,11 @@ class MainActivity : ComponentActivity() {
 //                        name = "Android",
 //                        modifier = Modifier.padding(innerPadding)
 //                    )
-                    val viewModel = AuthViewModel()
+
 
                     val navController = rememberNavController()
-
+                    val viewModel = AuthViewModel(navController = navController)
+                    AuthManager(navController = navController)
                     // Set up the NavHost with the navigation graph
                     NavHost(navController = navController, startDestination = "login_screen") {
                         composable("login_screen") {
@@ -48,6 +49,14 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.padding(innerPadding),
                                 typography = Typography,
                                 title = "Swar",
+                                viewModel = viewModel
+                            )
+                        }
+                        composable("home") {
+                            HomeScreen(
+                                navController = navController,
+                                modifier = Modifier.padding(innerPadding),
+                                typography = Typography,
                                 viewModel = viewModel
                             )
                         }

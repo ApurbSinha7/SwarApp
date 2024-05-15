@@ -1,7 +1,9 @@
 package com.android.swar
+import android.util.Log
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 
-class AuthManager {
+class AuthManager(private val navController: NavController) {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
@@ -9,9 +11,11 @@ class AuthManager {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    onSuccess()
+                    val currentUser = auth.currentUser
+                    onSuccess(); navController.navigate("home")
                 } else {
                     onError(task.exception?.message ?: "Registration failed")
+                    Log.e("AuthManager", "Registration failed: ${task.exception?.message}")
                 }
             }
     }
@@ -20,14 +24,16 @@ class AuthManager {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    onSuccess()
+                    onSuccess(); navController.navigate("home")
                 } else {
                     onError(task.exception?.message ?: "Login failed")
+                    Log.e("AuthManager", "Registration failed: ${task.exception?.message}")
                 }
             }
     }
 
     fun logout() {
         auth.signOut()
+        navController.navigate("login_screen")
     }
 }

@@ -74,6 +74,10 @@ fun LoginScreen(modifier: Modifier = Modifier,
                                 .clickable { navController.navigate("register") }
                 )
         }
+
+}
+fun logi(navController: NavController){
+        navController.navigate("register")
 }
 
 
