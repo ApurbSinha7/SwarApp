@@ -1,6 +1,7 @@
 package com.android.swar
 
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,16 +21,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.android.swar.presentation.sign_in.SignInState
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier,
-        title: String, typography: Typography, viewModel: AuthViewModel, navController: NavController
+fun LoginScreen(modifier: Modifier = Modifier, typography: Typography,
+                state: SignInState,
+                onSignInClick: () -> Unit,
+                viewModel: AuthViewModel, navController: NavController
 ) {
+        val context = LocalContext.current
+        LaunchedEffect(key1 = state.signInError) {
+                state.signInError?.let { error ->
+                        Toast.makeText(
+                                context,
+                                error,
+                                Toast.LENGTH_LONG
+                        ).show()
+                }
+        }
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
 
@@ -38,7 +54,7 @@ fun LoginScreen(modifier: Modifier = Modifier,
                 horizontalAlignment = Alignment.CenterHorizontally
         ) {
                 Text(
-                        text = title,
+                        text = "Swar",
                         style = typography.bodyLarge,
                         modifier = Modifier.padding(top = 48.dp, bottom = 32.dp)
                 )
@@ -73,6 +89,9 @@ fun LoginScreen(modifier: Modifier = Modifier,
                                 .fillMaxWidth()
                                 .clickable { navController.navigate("register") }
                 )
+                Button(onClick = onSignInClick) {
+                        Text(text = "Sign in")
+                }
         }
 
 }

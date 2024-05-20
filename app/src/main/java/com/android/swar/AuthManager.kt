@@ -24,7 +24,9 @@ class AuthManager(private val navController: NavController) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    onSuccess(); navController.navigate("home")
+                    onSuccess(); navController.navigate("home"){
+                        popUpTo("login_screen") { inclusive = true }
+                    }
                 } else {
                     onError(task.exception?.message ?: "Login failed")
                     Log.e("AuthManager", "Registration failed: ${task.exception?.message}")
@@ -34,6 +36,8 @@ class AuthManager(private val navController: NavController) {
 
     fun logout() {
         auth.signOut()
-        navController.navigate("login_screen")
+        navController.navigate("login_screen"){
+            popUpTo("home") { inclusive = true }
+        }
     }
 }

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "19830205710",
+    "firebase_url": "https://swar-300de-default-rtdb.firebaseio.com",
     "project_id": "swar-300de",
     "storage_bucket": "swar-300de.appspot.com"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.android.swar"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "19830205710-sj37muv1g91hisg0cujhdl43prikokp0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.swar",
+            "certificate_hash": "f661a1775e4d9f5ab96f6f38ff2b1625ecf59200"
+          }
+        },
+        {
+          "client_id": "19830205710-2sf0cfg0tagbnfrls8fur1lsttvglppa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCwG4LirhUUYG5XbxdVwFn7FfXRLliqop4"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19830205710-2sf0cfg0tagbnfrls8fur1lsttvglppa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+
 //    id("com.google.gms.google-services") // Apply the Google Services plugin
 }
 
@@ -60,8 +61,11 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-auth")
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation("com.google.android.gms:play-services-auth:21.1.1")
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("io.coil-kt:coil-compose:2.4.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -73,7 +77,9 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.androidx.foundation.layout.android)
     implementation(libs.firebase.auth)
-//    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.lifecycle.runtime.compose.android)
+//  implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -86,5 +92,5 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-//    implementation("androidx.compose.material:material:1.6.7")
+implementation("androidx.compose.material3:material3:1.2.1")
 }
