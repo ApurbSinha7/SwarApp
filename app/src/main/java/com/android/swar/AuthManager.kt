@@ -29,11 +29,14 @@ class AuthManager(private val navController: NavController) {
                     }
                 } else {
                     onError(task.exception?.message ?: "Login failed")
-                    Log.e("AuthManager", "Registration failed: ${task.exception?.message}")
+                    Log.e("AuthManager", "Login failed: ${task.exception?.message}")
                 }
             }
     }
 
+    fun isLoggedIn(): Boolean {
+        return auth.currentUser != null
+    }
     fun logout() {
         auth.signOut()
         navController.navigate("login_screen"){

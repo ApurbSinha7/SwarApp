@@ -34,7 +34,9 @@ class AuthViewModel(navController : NavController) : ViewModel() {
             )
         }
     }
-
+    fun isLoggedIn(): Boolean {
+        return authManager.isLoggedIn()
+    }
 
 
     fun logout() {

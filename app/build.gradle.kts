@@ -56,11 +56,10 @@ dependencies {
 
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
-
-    // Add the dependency for the Realtime Database library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-auth")
+
     // Also add the dependency for the Google Play services library and specify its version
     implementation("com.google.android.gms:play-services-auth:21.1.1")
 
@@ -79,6 +78,11 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.lifecycle.runtime.compose.android)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.runner)
+    implementation(libs.firebase.firestore)
 //  implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -92,5 +96,8 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-implementation("androidx.compose.material3:material3:1.2.1")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.7")
+
+    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("com.google.firebase:firebase-storage")
 }
