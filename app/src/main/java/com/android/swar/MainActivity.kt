@@ -19,18 +19,28 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.android.swar.presentation.profile.ClickProfile
 import com.android.swar.presentation.profile.ProfileScreen
 import com.android.swar.presentation.sign_in.GoogleAuthUiClient
 import com.android.swar.presentation.sign_in.SignInViewModel
 import com.android.swar.ui.theme.ComposeGoogleSignInCleanArchitectureTheme
 import com.android.swar.ui.theme.SwarTheme
 import com.android.swar.ui.theme.Typography
+import com.android.swar.utils.navigateToHome
+import com.android.swar.viewModel.ProfileViewModel
 import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.launch
 
@@ -61,19 +71,32 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val splashScreen = installSplashScreen()
 //        setContentView(R.layout.activity_main)
         enableEdgeToEdge()
         setContent {
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+
+            window.statusBarColor = Color(0xFFF6E517).toArgb()
+
+            // Customize status bar text and icon color
+            val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+            windowInsetsController.isAppearanceLightStatusBars = true // Ensures dark icons/text
+//            windowInsetsController.setSystemBarsAppearance(
+//                0,
+//                WindowInsetsControllerCompat.APPEARANCE_LIGHT_STATUS_BARS
+//            )
             CompositionLocalProvider(
                 androidx.lifecycle.compose.LocalLifecycleOwner provides this@MainActivity,
             ) {
                 SwarTheme {
 
                     val navController = rememberNavController()
-                    val authviewModel = AuthViewModel(navController = navController)
+                    val authViewModel = AuthViewModel(navController = navController)
                     AuthManager(navController = navController)
+                    val profileViewModel : ProfileViewModel = viewModel()
                     var strtdes = ""
-                    strtdes = if(authviewModel.isLoggedIn()) "home" else "login_screen"
+                    strtdes = if(authViewModel.isLoggedIn()) "home" else "login_screen"
 
                     ComposeGoogleSignInCleanArchitectureTheme {
                         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -113,6 +136,12 @@ class MainActivity : ComponentActivity() {
                                                 "Sign in successful",
                                                 Toast.LENGTH_LONG
                                             ).show()
+                                            val signedInUser = googleAuthUiClient.getSignedInUser()
+                                            signedInUser?.let {
+                                                profileViewModel.saveUserToDatabase(it){
+                                                    navigateToHome(navController = navController)
+                                                }
+                                            }
 
                                             navController.navigate("home")
                                             viewModel.resetState()
@@ -123,7 +152,7 @@ class MainActivity : ComponentActivity() {
                                         navController = navController,
                                         modifier = Modifier.padding(innerPadding),
                                         typography = Typography,
-                                        viewModel = authviewModel,
+                                        viewModel = authViewModel,
                                         state = state,
                                         onSignInClick = {
                                             lifecycleScope.launch {
@@ -187,6 +216,12 @@ class MainActivity : ComponentActivity() {
                                                 "Sign in successful",
                                                 Toast.LENGTH_LONG
                                             ).show()
+                                            val signedInUser = googleAuthUiClient.getSignedInUser()
+                                            signedInUser?.let {
+                                                profileViewModel.saveUserToDatabase(it){
+                                                    navigateToHome(navController = navController)
+                                                }
+                                            }
 
                                             navController.navigate("home")
                                             viewModel.resetState()
@@ -197,7 +232,7 @@ class MainActivity : ComponentActivity() {
                                         modifier = Modifier.padding(innerPadding),
                                         typography = Typography,
                                         title = "Swar",
-                                        viewModel = authviewModel,
+                                        viewModel = authViewModel,
                                         state = state,
                                         onSignInClick = {
                                             lifecycleScope.launch {
@@ -221,6 +256,13 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable("right_screen") {
                                     RightScreen(navController = navController)
+                                }
+                                composable(
+                                    route = "profile_screen/{userId}",
+                                    arguments = listOf(navArgument("userId") { type = NavType.StringType })
+                                ) { backStackEntry ->
+                                    val userId = backStackEntry.arguments?.getString("userId")
+                                    userId?.let { ClickProfile(viewModel = viewModel(), userId = it, navController =  navController) }
                                 }
                             }
                         }

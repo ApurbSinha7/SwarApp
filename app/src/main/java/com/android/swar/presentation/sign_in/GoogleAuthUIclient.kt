@@ -18,6 +18,7 @@ class GoogleAuthUiClient(
     private val oneTapClient: SignInClient
 ) {
     private val auth = Firebase.auth
+    private val sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
 
     suspend fun signIn(): IntentSender? {
         val result = try {
@@ -38,10 +39,12 @@ class GoogleAuthUiClient(
         val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
         return try {
             val user = auth.signInWithCredential(googleCredentials).await().user
+            sharedPreferences.edit().putBoolean("is_google_sign_in", true).apply()
             SignInResult(
                 data = user?.run {
                     UserData(
                         userId = uid,
+                        email = email,
                         username = displayName,
                         profilePictureUrl = photoUrl?.toString()
                     )
@@ -62,6 +65,7 @@ class GoogleAuthUiClient(
         try {
             oneTapClient.signOut().await()
             auth.signOut()
+            sharedPreferences.edit().remove("is_google_sign_in").apply()
         } catch(e: Exception) {
             e.printStackTrace()
             if(e is CancellationException) throw e
@@ -71,9 +75,14 @@ class GoogleAuthUiClient(
     fun getSignedInUser(): UserData? = auth.currentUser?.run {
         UserData(
             userId = uid,
+            email = email,
             username = displayName,
             profilePictureUrl = photoUrl?.toString()
         )
+    }
+
+    fun isGoogleSignIn(): Boolean {
+        return sharedPreferences.getBoolean("is_google_sign_in", false)
     }
 
     private fun buildSignInRequest(): BeginSignInRequest {

@@ -1,9 +1,11 @@
 package com.android.swar.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.android.swar.model.UserProfile
+import com.android.swar.presentation.sign_in.UserData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -17,6 +19,24 @@ class ProfileViewModel : ViewModel() {
 
     init {
         fetchUserProfile()
+    }
+
+    fun saveUserToDatabase(user: UserData, onSuccess : () -> Unit) {
+        val userProfile = UserProfile(
+            uid = user.userId,
+            email = user.email,
+            displayName = user.username,
+            photoUrl = user.profilePictureUrl
+        )
+
+        db.collection("users").document(user.userId).set(userProfile)
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+                // Handle the error, possibly show a Toast or Snackbar
+                Log.e("AuthViewModel", "Failed to save user data: ${e.message}")
+            }
     }
 
     private fun fetchUserProfile() {

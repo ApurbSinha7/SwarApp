@@ -1,4 +1,5 @@
 package com.android.swar
+import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
@@ -7,7 +8,7 @@ class AuthManager(private val navController: NavController) {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun register(email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun register(email: String, password: String, username: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -35,12 +36,24 @@ class AuthManager(private val navController: NavController) {
     }
 
     fun isLoggedIn(): Boolean {
-        return auth.currentUser != null
+        return auth.currentUser !=null
     }
     fun logout() {
         auth.signOut()
         navController.navigate("login_screen"){
             popUpTo("home") { inclusive = true }
         }
+    }
+    fun sendPasswordReset(email: String, toast: (done : Boolean) -> Unit) {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "Email sent.")
+                    toast(true)
+                }
+                else{
+                    toast(false)
+                }
+            }
     }
 }

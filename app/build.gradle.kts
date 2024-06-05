@@ -92,6 +92,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.compose.ui:ui:1.6.7")
+
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
+
+    implementation ("com.google.android.material:material:1.12.0")
+
+    implementation ("androidx.core:core-splashscreen:1.0.1")
     val nav_version = "2.7.7"
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
@@ -100,4 +106,6 @@ dependencies {
 
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("com.google.firebase:firebase-storage")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.1")
+    implementation ("com.google.accompanist:accompanist-swiperefresh:0.27.0")
 }
